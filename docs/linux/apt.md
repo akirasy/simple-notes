@@ -46,6 +46,13 @@ Run `sudo apt update`.
 So it's better we create a 'mount script' which runs on every reboot using `crontab`.<br>
 I have mine on this [link](https://gist.github.com/akirasy/06f30d1dcae4609e5f48815bc818150c).
 
+## APT Errors
+A `Check-Valid-Until`  is a yes/no value which controls if APT should try to detect replay attacks. However, some repositories such as historic archives are not updated any more by design, so this check can be disabled by setting this option to `false`.
+```
+# Usage
+apt -o Acquire::Check-Valid-Until=false update
+```
+
 ## Get deb files for offline host using online host
 Run this command on desired to install PC.
 ```
