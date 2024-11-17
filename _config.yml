@@ -2,3 +2,9 @@ title: Simple Notes
 description: Many random notes worth searching
 theme: just-the-docs
 
+exclude:
+  - Gemfile
+  - Gemfile.lock
+  - LICENSE
+  - README.md
+
