@@ -1,0 +1,21 @@
+theme: just-the-docs
+
+url: "https://akirasy.github.io"
+baseurl: "/simple-notes"
+destination: docs
+
+title: Simple Notes
+description: A quick note of documentations
+
+exclude:
+  # Jekyll defaults
+  - .sass-cache/
+  - .jekyll-cache/
+  - gemfiles/
+  - Gemfile
+  - Gemfile.lock
+  - node_modules/
+  - vendor/bundle/
+  - vendor/cache/
+  - vendor/gems/
+  - vendor/ruby/
