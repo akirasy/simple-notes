@@ -208,7 +208,6 @@ For binary packages made on one system to be usable on other systems they must f
 1. Fix file permission
 
     ```
-    sudo chown -R portage:portage /etc/portage/gnupg
     sudo chmod -R 775 /etc/portage/gnupg
     sudo find /etc/portage/gnupg -type f -exec chmod 664 {} +
     ```
