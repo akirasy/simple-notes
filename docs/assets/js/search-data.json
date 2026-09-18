@@ -29,7 +29,7 @@
   },"4": {
     "doc": "Local Binhost",
     "title": "Client",
-    "content": "Setup binary package repository . | Set up the binary package repository in /etc/portage/binrepos.conf. [gentoo] priority = 1 sync-uri = https://distfiles.gentoo.org/releases/amd64/binpackages/23.0/x86-64 location = /var/cache/binhost/gentoo verify-signature = true [local-binhost] priority = 100 sync-uri = http://{HOST-IP-DOMAIN-ADDRESS}:8080 location = /var/cache/binhost/local-binhost verify-signature = true . | Edit /etc/portage/make.conf to satisfy to following. FEATURES=\"${FEATURES} getbinpkg binpkg-request-signature\" . | . Import and Trust the Host’s Public Signing Key . | Transfer the public key from host into the client PC . Use scp or any other method to transfer the file . | Initialize Portage’s verification keyring on client . getuto . | Import host’s public key . gpg --homedir=/etc/portage/gnupg --import binpkg-public.asc . | Trust and sign key locally using getuto password . gpg --homedir=/etc/portage/gnupg \\ --passphrase-file /etc/portage/gnupg/pass \\ --lsign-key 173AF510420F98DCBFF14C42EBAAC2474A0F97F5 . | Clean up exported key file . rm binpkg-public.asc . | Fix file permission . sudo chown -R portage:portage /etc/portage/gnupg sudo chmod -R 775 /etc/portage/gnupg sudo find /etc/portage/gnupg -type f -exec chmod 664 {} + . If not done, gpg will produce errors as below . gpg: failed to create temporary file 'etc/portage/gnupg/.#1k0x....' : Permission denied . | . Client PC setup completed. Enjoy! . | Install binary packages using Portage as usual . emerge -av &lt;category/package-name&gt; . | . ",
+    "content": "Setup binary package repository . | Set up the binary package repository in /etc/portage/binrepos.conf. [gentoo] priority = 1 sync-uri = https://distfiles.gentoo.org/releases/amd64/binpackages/23.0/x86-64 location = /var/cache/binhost/gentoo verify-signature = true [local-binhost] priority = 100 sync-uri = http://{HOST-IP-DOMAIN-ADDRESS}:8080 location = /var/cache/binhost/local-binhost verify-signature = true . | Edit /etc/portage/make.conf to satisfy to following. FEATURES=\"${FEATURES} getbinpkg binpkg-request-signature\" . | . Import and Trust the Host’s Public Signing Key . | Transfer the public key from host into the client PC . Use scp or any other method to transfer the file . | Initialize Portage’s verification keyring on client . getuto . | Import host’s public key . gpg --homedir=/etc/portage/gnupg --import binpkg-public.asc . | Trust and sign key locally using getuto password . gpg --homedir=/etc/portage/gnupg \\ --passphrase-file /etc/portage/gnupg/pass \\ --lsign-key 173AF510420F98DCBFF14C42EBAAC2474A0F97F5 . | Clean up exported key file . rm binpkg-public.asc . | Fix file permission . sudo chmod -R 775 /etc/portage/gnupg sudo find /etc/portage/gnupg -type f -exec chmod 664 {} + . If not done, gpg will produce errors as below . gpg: failed to create temporary file 'etc/portage/gnupg/.#1k0x....' : Permission denied . | . Client PC setup completed. Enjoy! . | Install binary packages using Portage as usual . emerge -av &lt;category/package-name&gt; . | . ",
     "url": "/simple-notes/gentoo-linux/binhost.html#client",
     
     "relUrl": "/gentoo-linux/binhost.html#client"
@@ -111,370 +111,398 @@
     
     "relUrl": "/linux-configs/file-permission.html#user-file-permissions"
   },"16": {
+    "doc": "General",
+    "title": "General",
+    "content": " ",
+    "url": "/simple-notes/spreadsheets/general.html",
+    
+    "relUrl": "/spreadsheets/general.html"
+  },"17": {
+    "doc": "General",
+    "title": "Table of Contents",
+    "content": ". | Cross-Sheet Filtering &amp; Matching . | 1. Basic Cross-Sheet Match (Checking for duplicates) | 2. Evaluate if Candidate is in a List | 3. Match Candidate in List WITH Additional Criteria | . | . ",
+    "url": "/simple-notes/spreadsheets/general.html#table-of-contents",
+    
+    "relUrl": "/spreadsheets/general.html#table-of-contents"
+  },"18": {
+    "doc": "General",
+    "title": "Cross-Sheet Filtering &amp; Matching",
+    "content": "These formulas use FILTER combined with COUNTIF or COUNTIFS to compare data across different sheets. 1. Basic Cross-Sheet Match (Checking for duplicates) . Use this to pull rows from one sheet only if their identifier exists on another sheet. =FILTER(masterlist!A:B, COUNTIF(active!B:B, masterlist!B:B) &gt; 0) . How it works: FILTER goes through every row in masterlist. COUNTIF acts as the condition by checking if the ID in masterlist!B:B exists anywhere in active!B:B. The &gt; 0 ensures only rows that find at least one match are displayed. 2. Evaluate if Candidate is in a List . Useful for pulling full records based on a specific master list of names or IDs. =FILTER(masterlist!A2:F, COUNTIF(active!G2:G, masterlist!B2:B) &gt; 0) . How it works: Identical logic to the first example, just with specific ranges. It returns data from masterlist (Columns A through F) only if the candidate’s ID in column B is found in the active sheet’s column G. 3. Match Candidate in List WITH Additional Criteria . Use this when checking against another sheet, but you have specific conditions that apply to that other sheet (e.g., a status column must be blank). =FILTER(masterlist!A2:F, COUNTIFS(active!G2:G, masterlist!B2:B, active!D2:D, \"\") &gt; 0) . How it works: By upgrading to COUNTIFS (with an “S” for multiple criteria), you can evaluate extra rules without triggering a “mismatched range sizes” error. It evaluates the active sheet internally and says: “Count how many times this ID appears in Col G AND has a blank Col D.” If that count is greater than zero, the FILTER displays the row. ",
+    "url": "/simple-notes/spreadsheets/general.html#cross-sheet-filtering--matching",
+    
+    "relUrl": "/spreadsheets/general.html#cross-sheet-filtering--matching"
+  },"19": {
     "doc": "git",
     "title": "git",
     "content": " ",
     "url": "/simple-notes/linux-pkgs/git.html",
     
     "relUrl": "/linux-pkgs/git.html"
-  },"17": {
+  },"20": {
     "doc": "git",
     "title": "Table of Contents",
     "content": ". | Using .gitignore | . ",
     "url": "/simple-notes/linux-pkgs/git.html#table-of-contents",
     
     "relUrl": "/linux-pkgs/git.html#table-of-contents"
-  },"18": {
+  },"21": {
     "doc": "git",
     "title": "Using .gitignore",
     "content": ". | Single file . | Put the exact filename. | .DS_Store . | Directories . | Include their paths and putting a / on the end. | If / is not present, it will match both files and directories with that name. | . node_modules/ logs/ . | Negation . | Use a prefix of ! to negate a file. | . !example.log . | Double Asterisk . | ** can be used to match any number of directories. | **/logs matches all files or directories named logs | **/logs/*.log matches all files ending with .log in a logs directory | logs/**/*.log matches all files ending with .log in the logs directory and any of its subdirectories. | logs/** matches all files inside of logs. | . | Comments . | Any lines that start with # are comments. | . # macOS Files .DS_Store . | . ",
     "url": "/simple-notes/linux-pkgs/git.html#using-gitignore",
     
     "relUrl": "/linux-pkgs/git.html#using-gitignore"
-  },"19": {
+  },"22": {
     "doc": "Grub Bootloader",
     "title": "Grub Bootloader",
     "content": " ",
     "url": "/simple-notes/linux-configs/grub.html",
     
     "relUrl": "/linux-configs/grub.html"
-  },"20": {
+  },"23": {
     "doc": "Grub Bootloader",
     "title": "Table of Contents",
     "content": ". | Word of advise | Hide or edit timer on GRUB bootloader | Boot to last-used OS | Rename OS menuentry . | Easy way | A bit complicated way | . | Boot to OS using GRUB shell | . ",
     "url": "/simple-notes/linux-configs/grub.html#table-of-contents",
     
     "relUrl": "/linux-configs/grub.html#table-of-contents"
-  },"21": {
+  },"24": {
     "doc": "Grub Bootloader",
     "title": "Word of advise",
     "content": ". | Always, always create backup of config file. | Make sure you have bootable usb drive to fix if anything goes wrong. | . To create backup of original setting file, run: . cp /etc/default/grub /etc/default/grub.orig . ",
     "url": "/simple-notes/linux-configs/grub.html#word-of-advise",
     
     "relUrl": "/linux-configs/grub.html#word-of-advise"
-  },"22": {
+  },"25": {
     "doc": "Grub Bootloader",
     "title": "Hide or edit timer on GRUB bootloader",
     "content": ". | Edit /etc/default/grub to these setting GRUB_TIMEOUT=0 # Change the number (in seconds) to shorten or prolong grub screen. | Then update grub bootloader sudo update-grub . | . ",
     "url": "/simple-notes/linux-configs/grub.html#hide-or-edit-timer-on-grub-bootloader",
     
     "relUrl": "/linux-configs/grub.html#hide-or-edit-timer-on-grub-bootloader"
-  },"23": {
+  },"26": {
     "doc": "Grub Bootloader",
     "title": "Boot to last-used OS",
     "content": ". | Edit /etc/default/grub to these setting GRUB_DEFAULT=saved GRUB_SAVEDEFAULT=true . | Then update grub bootloader sudo update-grub . | . ",
     "url": "/simple-notes/linux-configs/grub.html#boot-to-last-used-os",
     
     "relUrl": "/linux-configs/grub.html#boot-to-last-used-os"
-  },"24": {
+  },"27": {
     "doc": "Grub Bootloader",
     "title": "Rename OS menuentry",
     "content": "Either way is fine, it depends on one’s preference actually. However, do note that changing these setting will prevent grub to update kernel. If you want to update kernel, just give the file its execution right and run sudo update-grub. Easy way . | Edit file /boot/grub/grub.cfg menuentry \"Something\" { set root=(hdX,Y) -- boot parameters -- } . | Change that Something to your desired name. | Do not run sudo update-grub. Otherwise grub.cfg will be regenerated to grub-script setting. | . A bit complicated way . | Open file /boot/grub/grub.cfg and look for these headers. ### BEGIN /etc/grub.d/10_linux ### *** *** ### BEGIN /etc/grub.d/30_os-prober ### *** *** . | Copy your desired menuentry and paste-append it to /etc/grub.d/40_custom. The grub man says to be sure to not leave empty line at the end of file. I haven’t tried it, so I don’t know what happen if we ignore the warning. | Then revoke executable right for these files. /etc/grub.d/10_linux /etc/grub.d/30_os-prober . | And lastly, update grub to make changes. sudo update-grub . | . ",
     "url": "/simple-notes/linux-configs/grub.html#rename-os-menuentry",
     
     "relUrl": "/linux-configs/grub.html#rename-os-menuentry"
-  },"25": {
+  },"28": {
     "doc": "Grub Bootloader",
     "title": "Boot to OS using GRUB shell",
     "content": ". | Identify /boot partition grub&gt; ls # expected output # (hd0) (hd0,1) (hd0,2) ... | Adapt to these commands to boot to OS grub&gt; set root=(hd0,1) grub&gt; linux /boot/vmlinuz root=/dev/sda1 grub&gt; initrd /initrd.img grub&gt; boot . | . ",
     "url": "/simple-notes/linux-configs/grub.html#boot-to-os-using-grub-shell",
     
     "relUrl": "/linux-configs/grub.html#boot-to-os-using-grub-shell"
-  },"26": {
+  },"29": {
     "doc": "Linux Packages",
     "title": "Linux Packages",
     "content": "Useful linux packages notes are here. ",
     "url": "/simple-notes/linux-pkgs/",
     
     "relUrl": "/linux-pkgs/"
-  },"27": {
+  },"30": {
     "doc": "Gentoo Linux",
     "title": "Gentoo Linux",
     "content": "Gentoo, a highly flexible, source-based Linux distribution. ",
     "url": "/simple-notes/gentoo-linux/",
     
     "relUrl": "/gentoo-linux/"
-  },"28": {
+  },"31": {
     "doc": "Gentoo Linux",
     "title": "Gentoo AMD64 Handbook",
     "content": "The Gentoo Handbook is an effort to centralize documentation into a coherent handbook. This handbook contains the installation instructions for an Internet-based installation and some additional sections for working with Gentoo’s native software tools such as the OpenRC init system and the Portage package manager. ",
     "url": "/simple-notes/gentoo-linux/#gentoo-amd64-handbook",
     
     "relUrl": "/gentoo-linux/#gentoo-amd64-handbook"
-  },"29": {
+  },"32": {
+    "doc": "Spreadsheets",
+    "title": "Spreadsheets",
+    "content": "All functions and formulas. ",
+    "url": "/simple-notes/spreadsheets/",
+    
+    "relUrl": "/spreadsheets/"
+  },"33": {
     "doc": "Linux Configs",
     "title": "Linux Configs",
     "content": "Useful linux notes are here. ",
     "url": "/simple-notes/linux-configs/",
     
     "relUrl": "/linux-configs/"
-  },"30": {
+  },"34": {
     "doc": "Coding is Life",
     "title": "Coding is Life",
     "content": "I mainly learn how to code from internet as a hobby. So I don’t have any books or whatsoever. I often kept searching the same thing after some time and that is not efficient. So here we are with these notes. ",
     "url": "/simple-notes/coding/",
     
     "relUrl": "/coding/"
-  },"31": {
+  },"35": {
     "doc": "Home",
     "title": "Introduction",
     "content": "Very often I need to search something repeatedly. So i decided to put it all here. ",
     "url": "/simple-notes/#introduction",
     
     "relUrl": "/#introduction"
-  },"32": {
+  },"36": {
     "doc": "Home",
     "title": "And here is all of them",
     "content": "All in one place. ",
     "url": "/simple-notes/#and-here-is-all-of-them",
     
     "relUrl": "/#and-here-is-all-of-them"
-  },"33": {
+  },"37": {
     "doc": "Home",
     "title": "Home",
     "content": " ",
     "url": "/simple-notes/",
     
     "relUrl": "/"
-  },"34": {
+  },"38": {
     "doc": "Javascript",
     "title": "Javascript",
     "content": " ",
     "url": "/simple-notes/coding/javascript.html",
     
     "relUrl": "/coding/javascript.html"
-  },"35": {
+  },"39": {
     "doc": "Javascript",
     "title": "Table of Contents",
     "content": ". | Looping through object | Filter out empty item in list | . ",
     "url": "/simple-notes/coding/javascript.html#table-of-contents",
     
     "relUrl": "/coding/javascript.html#table-of-contents"
-  },"36": {
+  },"40": {
     "doc": "Javascript",
     "title": "Looping through object",
     "content": "Object.entries(obj).forEach(item =&gt; { let key = item[0]; let value = item[1]; }); . ",
     "url": "/simple-notes/coding/javascript.html#looping-through-object",
     
     "relUrl": "/coding/javascript.html#looping-through-object"
-  },"37": {
+  },"41": {
     "doc": "Javascript",
     "title": "Filter out empty item in list",
     "content": "let someArray = ['', 'a', 'b', '', 'c', '']; let output = someArray.filter(item =&gt; item); console.log(output); // Expected output // ['a', 'b', 'c'] . ",
     "url": "/simple-notes/coding/javascript.html#filter-out-empty-item-in-list",
     
     "relUrl": "/coding/javascript.html#filter-out-empty-item-in-list"
-  },"38": {
+  },"42": {
     "doc": "Markdown",
     "title": "Markdown",
     "content": " ",
     "url": "/simple-notes/coding/markdown.html",
     
     "relUrl": "/coding/markdown.html"
-  },"39": {
+  },"43": {
     "doc": "Markdown",
     "title": "Table of Contents",
     "content": ". | Basic Syntax | Extended Syntax | . This notes is taken from The Markdown Guide! . ",
     "url": "/simple-notes/coding/markdown.html#table-of-contents",
     
     "relUrl": "/coding/markdown.html#table-of-contents"
-  },"40": {
+  },"44": {
     "doc": "Markdown",
     "title": "Basic Syntax",
     "content": "These are the elements outlined in John Gruber’s original design document. All Markdown applications support these elements. | Heading . # H1 ## H2 ### H3 . | Bold . **bold text** . | Italic . *italicized text* . | Blockquote . &gt; blockquote . | Ordered List . 1. First item 2. Second item 3. Third item . | Unordered List . - First item - Second item - Third item . | Code . `code` . | Horizontal Rule . --- . | Link . [Markdown Guide](https://www.markdownguide.org) . | Image . ![alt text](https://www.markdownguide.org/assets/images/tux.png) . | . ",
     "url": "/simple-notes/coding/markdown.html#basic-syntax",
     
     "relUrl": "/coding/markdown.html#basic-syntax"
-  },"41": {
+  },"45": {
     "doc": "Markdown",
     "title": "Extended Syntax",
     "content": "These elements extend the basic syntax by adding additional features. Not all Markdown applications support these elements. | Table . | Syntax | Description | ----------- | ----------- | Header | Title | Paragraph | Text | . | Fenced Code Block . \\``` { \"firstName\": \"John\", \"lastName\": \"Smith\", \"age\": 25 } \\``` . | Footnote . Here's a sentence with a footnote. [^1] [^1]: This is the footnote. | Heading ID . ### My Great Heading {#custom-id} . | Definition List . term : definition . | Strikethrough . ~~The world is flat.~~ . | Task List . - [x] Write the press release - [ ] Update the website - [ ] Contact the media . | Emoji . That is so funny! :joy: . See also Copying and Pasting Emoji . | Highlight . I need to highlight these ==very important words==. | Subscript . H~2~O . | Superscript . X^2^ . | . ",
     "url": "/simple-notes/coding/markdown.html#extended-syntax",
     
     "relUrl": "/coding/markdown.html#extended-syntax"
-  },"42": {
+  },"46": {
     "doc": "openssh",
     "title": "openssh",
     "content": " ",
     "url": "/simple-notes/linux-pkgs/openssh.html",
     
     "relUrl": "/linux-pkgs/openssh.html"
-  },"43": {
+  },"47": {
     "doc": "openssh",
     "title": "Table of Contents",
     "content": ". | Start ssh-agent | Passwordless SSH | SSH activation script | Start ssh-agent automatically | . ",
     "url": "/simple-notes/linux-pkgs/openssh.html#table-of-contents",
     
     "relUrl": "/linux-pkgs/openssh.html#table-of-contents"
-  },"44": {
+  },"48": {
     "doc": "openssh",
     "title": "Start ssh-agent",
     "content": "eval \"$(ssh-agent -s)\" . ",
     "url": "/simple-notes/linux-pkgs/openssh.html#start-ssh-agent",
     
     "relUrl": "/linux-pkgs/openssh.html#start-ssh-agent"
-  },"45": {
+  },"49": {
     "doc": "openssh",
     "title": "Passwordless SSH",
     "content": ". | Generate new SSH key . ssh-keygen -C \"key-name\" . | Add SSH key to the ssh-agent . ssh-add {path/to/SSH_key) . | Copy ssh-key to the remote server . ssh-copy-id remote_username@server_ip_address . SSH key could also be transferred manually. Copy the key into ~/.ssh/ onto the client PC. | Setup completed. Enjoy! Just connect to the remote server . ssh remote_username@server_ip_address . This method also works for setting up SSH on Github. Just copy the key.pub contents into Github settings. Test your SSH connection with Github using ssh -T git@github.com afterwards. | . ",
     "url": "/simple-notes/linux-pkgs/openssh.html#passwordless-ssh",
     
     "relUrl": "/linux-pkgs/openssh.html#passwordless-ssh"
-  },"46": {
+  },"50": {
     "doc": "openssh",
     "title": "SSH activation script",
     "content": "#!/usr/bin/bash # SSH credentials SSH_KEY=$HOME/.ssh/github # Activation script eval \"$(ssh-agent -s)\" ssh-add $SSH_KEY echo \"GitHub credentials activated!\" . ",
     "url": "/simple-notes/linux-pkgs/openssh.html#ssh-activation-script",
     
     "relUrl": "/linux-pkgs/openssh.html#ssh-activation-script"
-  },"47": {
+  },"51": {
     "doc": "openssh",
     "title": "Start ssh-agent automatically",
     "content": ". | Append ~/.bashrc file with the following content. if [ -z \"$SSH_AUTH_SOCK\" ]; then eval \"$(ssh-agent -s)\" fi . | You might also want to add your ssh-key automatically. Just append your key in the ~/.bashrc file. SSH_KEYS_TO_ADD=( \"$HOME/.ssh/id_rsa\" \"$HOME/.ssh/id_ed25519\" # Add more key paths here, one per line # \"$HOME/.ssh/my_other_key\" ) for key_path in \"${SSH_KEYS_TO_ADD[@]}\"; do if [ -f \"$key_path\" ]; then echo \"Adding key: $key_path\" ssh-add \"$key_path\" || echo \"Failed to add key: $key_path (check passphrase or file permissions)\" else echo \"Warning: Private key file not found: $key_path\" fi done . | . ",
     "url": "/simple-notes/linux-pkgs/openssh.html#start-ssh-agent-automatically",
     
     "relUrl": "/linux-pkgs/openssh.html#start-ssh-agent-automatically"
-  },"48": {
+  },"52": {
     "doc": "samba",
     "title": "samba",
     "content": " ",
     "url": "/simple-notes/linux-pkgs/samba.html",
     
     "relUrl": "/linux-pkgs/samba.html"
-  },"49": {
+  },"53": {
     "doc": "samba",
     "title": "Table of Contents",
     "content": ". | Installation | Configuration | Samba users | User file permissions | Advanced configuration | . ",
     "url": "/simple-notes/linux-pkgs/samba.html#table-of-contents",
     
     "relUrl": "/linux-pkgs/samba.html#table-of-contents"
-  },"50": {
+  },"54": {
     "doc": "samba",
     "title": "Installation",
     "content": "Use apt to install samba. apt install samba . Some guide might say to install samba-common-bin too, but for me installing samba is enough. ",
     "url": "/simple-notes/linux-pkgs/samba.html#installation",
     
     "relUrl": "/linux-pkgs/samba.html#installation"
-  },"51": {
+  },"55": {
     "doc": "samba",
     "title": "Configuration",
     "content": "Samba provides default config at /etc/samba/smb.conf. I usually backup that default config to /etc/samba/smb.conf.orig and replace it with mine below. #======================= Global Settings ======================= [global] server role = standalone server #======================= Share Definitions ======================= [abah] comment = File abah path = /home/pi/samba/abah/ valid users = abah writeable = yes create mask = 774 create directory mask = 774 [ibu] comment = File ibu path = /home/pi/samba/ibu/ valid users = ibu writeable = yes create mask = 774 create directory mask = 774 [media-server] comment = Movies, music, etc path = /home/pi/samba/media-server/ valid users = @pi writeable = yes create mask = 774 create directory mask = 774 . ",
     "url": "/simple-notes/linux-pkgs/samba.html#configuration",
     
     "relUrl": "/linux-pkgs/samba.html#configuration"
-  },"52": {
+  },"56": {
     "doc": "samba",
     "title": "Samba users",
     "content": "Samba uses the server’s user. So to implement unique user in samba, follow these steps. | Add new user to the server by using: sudo useradd {new_username} . | After creating new user, give it a new samba password as below: sudo smbpasswd -a {new_username} . To modify an existing Samba user’s Samba password use: smbpasswd {username} . | . ",
     "url": "/simple-notes/linux-pkgs/samba.html#samba-users",
     
     "relUrl": "/linux-pkgs/samba.html#samba-users"
-  },"53": {
+  },"57": {
     "doc": "samba",
     "title": "User file permissions",
     "content": "Summary of permission using octal numbers. | Symbolic | Octal | English | . | - - - | 0 | No Permission | . | - - x | 1 | Execute | . | - - w | 2 | Write | . | - w x | 3 | Write &amp; Execute | . | r - - | 4 | Read | . | r - x | 5 | Read &amp; Execute | . | - r w | 6 | Read &amp; Write | . | r w x | 7 | Read, Write, Execute | . In samba config, this can be defined as: . create mask = 0744 create directory mask = 0755 . ",
     "url": "/simple-notes/linux-pkgs/samba.html#user-file-permissions",
     
     "relUrl": "/linux-pkgs/samba.html#user-file-permissions"
-  },"54": {
+  },"58": {
     "doc": "samba",
     "title": "Advanced configuration",
     "content": "There are just too many config to be mentioned here. Go to the official documentation for those config together with their default values. Use the one that suits your need. ",
     "url": "/simple-notes/linux-pkgs/samba.html#advanced-configuration",
     
     "relUrl": "/linux-pkgs/samba.html#advanced-configuration"
-  },"55": {
+  },"59": {
     "doc": "Linux Swap",
     "title": "Linux Swap",
     "content": " ",
     "url": "/simple-notes/linux-configs/swap.html",
     
     "relUrl": "/linux-configs/swap.html"
-  },"56": {
+  },"60": {
     "doc": "Linux Swap",
     "title": "Table of Contents",
     "content": ". | General idea | Changing swappiness value temporarily | Set swappiness value permanently | Using swap file (instead of swap partition) | . ",
     "url": "/simple-notes/linux-configs/swap.html#table-of-contents",
     
     "relUrl": "/linux-configs/swap.html#table-of-contents"
-  },"57": {
+  },"61": {
     "doc": "Linux Swap",
     "title": "General idea",
     "content": "Swapping is a technique where data in Random Access Memory (RAM) is written to a special location on your hard disk—either a swap partition or a swap file—to free up RAM. Based on Linux documentation: . \"This control is used to define how aggressive (sic) the kernel will swap memory pages. Higher values will increase aggressiveness, lower values decrease the amount of swap. A value of 0 instructs the kernel not to initiate swap until the amount of free and file-backed pages is less than the high water mark in a zone. The default value is 60.\" . ",
     "url": "/simple-notes/linux-configs/swap.html#general-idea",
     
     "relUrl": "/linux-configs/swap.html#general-idea"
-  },"58": {
+  },"62": {
     "doc": "Linux Swap",
     "title": "Changing swappiness value temporarily",
     "content": "sudo sysctl vm.swappiness={value} . ",
     "url": "/simple-notes/linux-configs/swap.html#changing-swappiness-value-temporarily",
     
     "relUrl": "/linux-configs/swap.html#changing-swappiness-value-temporarily"
-  },"59": {
+  },"63": {
     "doc": "Linux Swap",
     "title": "Set swappiness value permanently",
     "content": "Open /etc/sysctl.conf file and add this line. vm.swappiness={value} . ",
     "url": "/simple-notes/linux-configs/swap.html#set-swappiness-value-permanently",
     
     "relUrl": "/linux-configs/swap.html#set-swappiness-value-permanently"
-  },"60": {
+  },"64": {
     "doc": "Linux Swap",
     "title": "Using swap file (instead of swap partition)",
     "content": ". | Create a swapfile sudo dd if=/dev/zero of=/swapfile bs=1024 count=1048576 . /swapfile is the path and name of the swap file. You can change this to something else. The number for count=1048576 equals 1GB. To increase size, multiply that number by 4 if 4GB swap is desired. | Set the swap file permission to 600 sudo chmod 600 /swapfile . | Format the newly created file as swap sudo mkswap /swapfile . | Enable the newly created swap file sudo swapon /swapfile . To verify if the new swap file is in use, run swapon -s . | Add entry to /etc/fstab /swapfile none swap sw 0 0 . | . ",
     "url": "/simple-notes/linux-configs/swap.html#using-swap-file-instead-of-swap-partition",
     
     "relUrl": "/linux-configs/swap.html#using-swap-file-instead-of-swap-partition"
-  },"61": {
+  },"65": {
     "doc": "vim",
     "title": "vim",
     "content": " ",
     "url": "/simple-notes/linux-pkgs/vim.html",
     
     "relUrl": "/linux-pkgs/vim.html"
-  },"62": {
+  },"66": {
     "doc": "vim",
     "title": "Table of Contents",
     "content": ". | Config files | Vim Add-ons . | Favorite vim Add-ons | . | . ",
     "url": "/simple-notes/linux-pkgs/vim.html#table-of-contents",
     
     "relUrl": "/linux-pkgs/vim.html#table-of-contents"
-  },"63": {
+  },"67": {
     "doc": "vim",
     "title": "Config files",
     "content": ". | .vimrc . \" -- global config -- syntax on filetype plugin indent on set ruler set number set nowrap set noswapfile . | . ",
     "url": "/simple-notes/linux-pkgs/vim.html#config-files",
     
     "relUrl": "/linux-pkgs/vim.html#config-files"
-  },"64": {
+  },"68": {
     "doc": "vim",
     "title": "Vim Add-ons",
     "content": ". | Create folders to put vim add-ons . mkdir -p ~/.vim/pack/git/start . | Clone the add-ons to the folder . git clone --depth=1 https://github.com/username/repository.git ~/.vim/pack/git/start/{repository} . | . Favorite vim Add-ons . | emmet-vim | indentLine | . ",
     "url": "/simple-notes/linux-pkgs/vim.html#vim-add-ons",
     
     "relUrl": "/linux-pkgs/vim.html#vim-add-ons"
-  },"65": {
+  },"69": {
     "doc": "yt-dlp",
     "title": "yt-dlp",
     "content": " ",
     "url": "/simple-notes/linux-pkgs/ytdlp.html",
     
     "relUrl": "/linux-pkgs/ytdlp.html"
-  },"66": {
+  },"70": {
     "doc": "yt-dlp",
     "title": "Table of Contents",
     "content": ". | Installation | Scripts | . ",
     "url": "/simple-notes/linux-pkgs/ytdlp.html#table-of-contents",
     
     "relUrl": "/linux-pkgs/ytdlp.html#table-of-contents"
-  },"67": {
+  },"71": {
     "doc": "yt-dlp",
     "title": "Installation",
     "content": "Commonly used in Android Termux. Termux has prepackaged this software. Just run: . pkg update &amp;&amp; \\ pkg install -y python-yt-dlp . ",
     "url": "/simple-notes/linux-pkgs/ytdlp.html#installation",
     
     "relUrl": "/linux-pkgs/ytdlp.html#installation"
-  },"68": {
+  },"72": {
     "doc": "yt-dlp",
     "title": "Scripts",
     "content": "Easy script for downloading video and audio. Downloaded file will be placed in device downloads folder. Just save this script (with a name of your liking) and put it in $PATH directory. Just remember to make it executable. #!/bin/bash echo \"\" echo \" _ _ _ \" echo \" _ _|_ __| |_ __ \" echo \" | | __|____ / _ | '_ \\ \" echo \" |_| ||_____| (_| |_) |\" echo \" \\__, |\\__| \\__,_|_| .__/ \" echo \" |___/ |_| \" echo \"\" # Set variables FILENAMETEMPLATE=\"%(title)s.%(ext)s\" OUTPUTFOLDER=\"/data/data/com.termux/files/home/storage/downloads\" # Check if the file is writable if ! [ -w \"$OUTPUTFOLDER\" ]; then echo \"The output folder is not writable.\" echo \"Please check your termux-setup-storage permission.\" exit 1 fi # Check if yt-dlp is installed command -v yt-dlp &gt;/dev/null 2&gt;&amp;1 if [ $? -ne 0 ]; then echo \"======== yt-dlp ============\" echo \"-- Installing yt-dlp...\" echo \"-- Please wait...\" pkg update &gt;/dev/null 2&gt;&amp;1 &amp;&amp; pkg install -y python-yt-dlp &gt;/dev/null 2&gt;&amp;1; echo \"-- yt-dlp installed successfully!\" echo \"\" fi # Check if termux-api is installed command -v termux-clipboard-get &gt;/dev/null 2&gt;&amp;1 if [ $? -ne 0 ]; then echo \"======== termux-api ========\" echo \"-- Installing termux-api...\" echo \"-- Please wait...\" pkg update &gt;/dev/null 2&gt;&amp;1 &amp;&amp; pkg install -y termux-api &gt;/dev/null 2&gt;&amp;1; echo \"-- termux-api installed successfully!\" echo \"\" fi # Verify copied clipboard echo \"Copied link:\" echo \"--&gt; $(termux-clipboard-get)\" echo \"\" echo \"Is this correct?\" # Get user input and begin download echo \"\" echo \"If yes, what do you want to do?\" echo \"1) Download video\" echo \"2) Download audio only\" echo \"*) Enter any key to quit\" echo \"\" read -p \"Enter your choice: \" INPUT case $INPUT in 1) yt-dlp --path $OUTPUTFOLDER --output $FILENAMETEMPLATE --format \"mp4\" $(termux-clipboard-get) ;; 2) yt-dlp --path $OUTPUTFOLDER --output $FILENAMETEMPLATE --format \"m4a\" $(termux-clipboard-get) ;; *) echo \"Script aborted.\" ;; esac echo \"\" . ",
