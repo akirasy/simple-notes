@@ -1,7 +1,7 @@
 ---
 title  : steam
 layout : default
-parent : Linux Packages
+parent : Games
 ---
 
 # {{ page.title }}
