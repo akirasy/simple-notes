@@ -90,447 +90,510 @@
     
     "relUrl": "/gentoo-linux/common-system-files.html#makeconf"
   },"13": {
+    "doc": "distrobox",
+    "title": "distrobox",
+    "content": " ",
+    "url": "/simple-notes/linux-pkgs/distrobox.html",
+    
+    "relUrl": "/linux-pkgs/distrobox.html"
+  },"14": {
+    "doc": "distrobox",
+    "title": "Table of Contents",
+    "content": ". | Run Distrobox using Podman (instead of Docker) | Create an Instance with its Own Home Folder | View Container Initialization Logs | . ",
+    "url": "/simple-notes/linux-pkgs/distrobox.html#table-of-contents",
+    
+    "relUrl": "/linux-pkgs/distrobox.html#table-of-contents"
+  },"15": {
+    "doc": "distrobox",
+    "title": "Run Distrobox using Podman (instead of Docker)",
+    "content": "To force Distrobox to use Podman when creating a container, set the DBX_CONTAINER_MANAGER environment variable: . DBX_CONTAINER_MANAGER=\"podman\" distrobox create \\ --name debian \\ --image debian:latest \\ --home ~/Container/distrobox/debian . (Alternatively, set container_manager=\"podman\" in ~/.config/distrobox/distrobox.conf to make it default). ",
+    "url": "/simple-notes/linux-pkgs/distrobox.html#run-distrobox-using-podman-instead-of-docker",
+    
+    "relUrl": "/linux-pkgs/distrobox.html#run-distrobox-using-podman-instead-of-docker"
+  },"16": {
+    "doc": "distrobox",
+    "title": "Create an Instance with its Own Home Folder",
+    "content": "Pass the --home (or -H) flag during creation to isolate configs, cache, and dotfiles: . distrobox create \\ --name &lt;container_name&gt; \\ --image &lt;image_name&gt; \\ --home ~/Path/To/Custom/Home \\ --container-manager podman . ",
+    "url": "/simple-notes/linux-pkgs/distrobox.html#create-an-instance-with-its-own-home-folder",
+    
+    "relUrl": "/linux-pkgs/distrobox.html#create-an-instance-with-its-own-home-folder"
+  },"17": {
+    "doc": "distrobox",
+    "title": "View Container Initialization Logs",
+    "content": "If distrobox enter hangs during the “Installing basic packages…” step, stream the live installation logs from a separate terminal tab: . podman logs -f &lt;container_name&gt; . (e.g., podman logs -f debian) . ",
+    "url": "/simple-notes/linux-pkgs/distrobox.html#view-container-initialization-logs",
+    
+    "relUrl": "/linux-pkgs/distrobox.html#view-container-initialization-logs"
+  },"18": {
     "doc": "File permissions",
     "title": "File permissions",
     "content": " ",
     "url": "/simple-notes/linux-configs/file-permission.html",
     
     "relUrl": "/linux-configs/file-permission.html"
-  },"14": {
+  },"19": {
     "doc": "File permissions",
     "title": "Table of Contents",
     "content": ". | User file permissions | . ",
     "url": "/simple-notes/linux-configs/file-permission.html#table-of-contents",
     
     "relUrl": "/linux-configs/file-permission.html#table-of-contents"
-  },"15": {
+  },"20": {
     "doc": "File permissions",
     "title": "User file permissions",
     "content": "Summary of permission using octal numbers. | Symbolic | Octal | English | . | - - - | 0 | No Permission | . | - - x | 1 | Execute | . | - - w | 2 | Write | . | - w x | 3 | Write &amp; Execute | . | r - - | 4 | Read | . | r - x | 5 | Read &amp; Execute | . | - r w | 6 | Read &amp; Write | . | r w x | 7 | Read, Write, Execute | . ",
     "url": "/simple-notes/linux-configs/file-permission.html#user-file-permissions",
     
     "relUrl": "/linux-configs/file-permission.html#user-file-permissions"
-  },"16": {
+  },"21": {
+    "doc": "Friday Nights Funkin",
+    "title": "Friday Nights Funkin",
+    "content": " ",
+    "url": "/simple-notes/games/friday-nights-funkin.html",
+    
+    "relUrl": "/games/friday-nights-funkin.html"
+  },"22": {
+    "doc": "Friday Nights Funkin",
+    "title": "Table of Contents",
+    "content": ". | Bundle game library | . ",
+    "url": "/simple-notes/games/friday-nights-funkin.html#table-of-contents",
+    
+    "relUrl": "/games/friday-nights-funkin.html#table-of-contents"
+  },"23": {
+    "doc": "Friday Nights Funkin",
+    "title": "Bundle game library",
+    "content": ". | Create debian distrobox . | Run this script: bundle-geme.sh {executable} . | . #!/usr/bin/env bash set -euo pipefail if [ \"$#\" -ne 1 ]; then echo \"Usage: $0 /path/to/executable\" exit 1 fi EXE_PATH=\"$1\" if [ ! -f \"$EXE_PATH\" ] || [ ! -x \"$EXE_PATH\" ]; then echo \"Error: Executable '$EXE_PATH' not found or not executable.\" exit 1 fi EXE_NAME=$(basename \"$EXE_PATH\") TARGET_DIR=$(dirname \"$(realpath \"$EXE_PATH\")\") LIB_DIR=\"$TARGET_DIR/lib\" PLUGINS_DIR=\"$TARGET_DIR/plugins\" # Exclude base runtime/system libs (libvlc, libvlccore, libgamemode are NOT excluded) EXCLUDE_REGEX=\"libc\\.so|libm\\.so|libdl\\.so|libpthread\\.so|librt\\.so|ld-linux|libstdc\\+\\+|libgcc_s|libsystemd|libudev|libGL|libEGL|libdrm|libvulkan|libX11|libxcb|libwayland\" mkdir -p \"$LIB_DIR\" echo \"Resolving dynamic libraries for $EXE_NAME...\" # 1. Resolve direct dependencies from executable LIBS_TO_COPY=$(ldd \"$EXE_PATH\" | awk '{print $3}' | sort -u | grep '^/' || true) # 2. Force inclusion of known dlopen targets (VLC, GameMode) for runtime_lib in libvlc.so libvlccore.so libgamemode.so; do SYS_LIB=$(ldconfig -p | grep \"$runtime_lib\" | awk '{print $NF}' | head -n 1 || true) if [ -n \"$SYS_LIB\" ]; then LIBS_TO_COPY=$(printf \"%s\\n%s\" \"$LIBS_TO_COPY\" \"$SYS_LIB\") fi done # Copy resolved libraries and recursively copy their sub-dependencies echo \"$LIBS_TO_COPY\" | sort -u | while read -r lib; do [ -z \"$lib\" ] &amp;&amp; continue if echo \"$lib\" | grep -qvE \"$EXCLUDE_REGEX\"; then echo \" -&gt; Copying $lib\" cp -L \"$lib\" \"$LIB_DIR/\" 2&gt;/dev/null || true # Pull sub-dependencies for runtime libraries like libvlc ldd \"$lib\" 2&gt;/dev/null | awk '{print $3}' | grep '^/' | while read -r sublib; do if echo \"$sublib\" | grep -qvE \"$EXCLUDE_REGEX\"; then cp -L \"$sublib\" \"$LIB_DIR/\" 2&gt;/dev/null || true fi done fi done # 3. Detect and copy VLC plugins if libvlc is bundled if [ -f \"$LIB_DIR/libvlc.so\"* ] || [ -f \"$LIB_DIR/libvlc.so.5\"* ]; then echo \"Bundling VLC plugins...\" mkdir -p \"$PLUGINS_DIR\" VLC_PLUGIN_SEARCH_PATHS=( \"/usr/lib64/vlc/plugins\" \"/usr/lib/vlc/plugins\" \"/usr/lib/x86_64-linux-gnu/vlc/plugins\" \"/usr/local/lib/vlc/plugins\" ) VLC_FOUND=0 for path in \"${VLC_PLUGIN_SEARCH_PATHS[@]}\"; do if [ -d \"$path\" ]; then echo \" -&gt; Copying VLC plugins from $path\" cp -r \"$path\"/* \"$PLUGINS_DIR/\" 2&gt;/dev/null || true VLC_FOUND=1 break fi done if [ \"$VLC_FOUND\" -eq 0 ]; then echo \"Warning: libvlc was detected, but no system VLC plugin directory was found!\" fi fi # Create start.sh wrapper with VLC_PLUGIN_PATH exported START_SCRIPT=\"$TARGET_DIR/start.sh\" cat &lt;&lt; EOF &gt; \"$START_SCRIPT\" #!/bin/sh SCRIPT_DIR=\"\\$(cd \"\\$(dirname \"\\$0\")\" &amp;&amp; pwd)\" LIB_DIR=\"\\$SCRIPT_DIR/lib\" PLUGINS_DIR=\"\\$SCRIPT_DIR/plugins\" TARGET=\"\\$SCRIPT_DIR/$EXE_NAME\" if [ ! -x \"\\$TARGET\" ]; then echo \"Error: Executable '\\$TARGET' not found or not executable.\" exit 1 fi export LD_LIBRARY_PATH=\"\\$LIB_DIR:\\${LD_LIBRARY_PATH:-}\" if [ -d \"\\$PLUGINS_DIR\" ]; then export VLC_PLUGIN_PATH=\"\\$PLUGINS_DIR\" fi exec \"\\$TARGET\" \"\\$@\" EOF chmod +x \"$START_SCRIPT\" echo \"Done! Bundled libraries into: $LIB_DIR\" [ -d \"$PLUGINS_DIR\" ] &amp;&amp; echo \"Bundled VLC plugins into: $PLUGINS_DIR\" echo \"Created runner for '$EXE_NAME' at: $START_SCRIPT\" . ",
+    "url": "/simple-notes/games/friday-nights-funkin.html#bundle-game-library",
+    
+    "relUrl": "/games/friday-nights-funkin.html#bundle-game-library"
+  },"24": {
     "doc": "General",
     "title": "General",
     "content": " ",
     "url": "/simple-notes/spreadsheets/general.html",
     
     "relUrl": "/spreadsheets/general.html"
-  },"17": {
+  },"25": {
     "doc": "General",
     "title": "Table of Contents",
     "content": ". | Cross-Sheet Filtering &amp; Matching . | 1. Basic Cross-Sheet Match (Checking for duplicates) | 2. Evaluate if Candidate is in a List | 3. Match Candidate in List WITH Additional Criteria | . | . ",
     "url": "/simple-notes/spreadsheets/general.html#table-of-contents",
     
     "relUrl": "/spreadsheets/general.html#table-of-contents"
-  },"18": {
+  },"26": {
     "doc": "General",
     "title": "Cross-Sheet Filtering &amp; Matching",
     "content": "These formulas use FILTER combined with COUNTIF or COUNTIFS to compare data across different sheets. 1. Basic Cross-Sheet Match (Checking for duplicates) . Use this to pull rows from one sheet only if their identifier exists on another sheet. =FILTER(masterlist!A:B, COUNTIF(active!B:B, masterlist!B:B) &gt; 0) . How it works: FILTER goes through every row in masterlist. COUNTIF acts as the condition by checking if the ID in masterlist!B:B exists anywhere in active!B:B. The &gt; 0 ensures only rows that find at least one match are displayed. 2. Evaluate if Candidate is in a List . Useful for pulling full records based on a specific master list of names or IDs. =FILTER(masterlist!A2:F, COUNTIF(active!G2:G, masterlist!B2:B) &gt; 0) . How it works: Identical logic to the first example, just with specific ranges. It returns data from masterlist (Columns A through F) only if the candidate’s ID in column B is found in the active sheet’s column G. 3. Match Candidate in List WITH Additional Criteria . Use this when checking against another sheet, but you have specific conditions that apply to that other sheet (e.g., a status column must be blank). =FILTER(masterlist!A2:F, COUNTIFS(active!G2:G, masterlist!B2:B, active!D2:D, \"\") &gt; 0) . How it works: By upgrading to COUNTIFS (with an “S” for multiple criteria), you can evaluate extra rules without triggering a “mismatched range sizes” error. It evaluates the active sheet internally and says: “Count how many times this ID appears in Col G AND has a blank Col D.” If that count is greater than zero, the FILTER displays the row. ",
     "url": "/simple-notes/spreadsheets/general.html#cross-sheet-filtering--matching",
     
     "relUrl": "/spreadsheets/general.html#cross-sheet-filtering--matching"
-  },"19": {
+  },"27": {
     "doc": "git",
     "title": "git",
     "content": " ",
     "url": "/simple-notes/linux-pkgs/git.html",
     
     "relUrl": "/linux-pkgs/git.html"
-  },"20": {
+  },"28": {
     "doc": "git",
     "title": "Table of Contents",
     "content": ". | Using .gitignore | . ",
     "url": "/simple-notes/linux-pkgs/git.html#table-of-contents",
     
     "relUrl": "/linux-pkgs/git.html#table-of-contents"
-  },"21": {
+  },"29": {
     "doc": "git",
     "title": "Using .gitignore",
     "content": ". | Single file . | Put the exact filename. | .DS_Store . | Directories . | Include their paths and putting a / on the end. | If / is not present, it will match both files and directories with that name. | . node_modules/ logs/ . | Negation . | Use a prefix of ! to negate a file. | . !example.log . | Double Asterisk . | ** can be used to match any number of directories. | **/logs matches all files or directories named logs | **/logs/*.log matches all files ending with .log in a logs directory | logs/**/*.log matches all files ending with .log in the logs directory and any of its subdirectories. | logs/** matches all files inside of logs. | . | Comments . | Any lines that start with # are comments. | . # macOS Files .DS_Store . | . ",
     "url": "/simple-notes/linux-pkgs/git.html#using-gitignore",
     
     "relUrl": "/linux-pkgs/git.html#using-gitignore"
-  },"22": {
+  },"30": {
     "doc": "Grub Bootloader",
     "title": "Grub Bootloader",
     "content": " ",
     "url": "/simple-notes/linux-configs/grub.html",
     
     "relUrl": "/linux-configs/grub.html"
-  },"23": {
+  },"31": {
     "doc": "Grub Bootloader",
     "title": "Table of Contents",
     "content": ". | Word of advise | Hide or edit timer on GRUB bootloader | Boot to last-used OS | Rename OS menuentry . | Easy way | A bit complicated way | . | Boot to OS using GRUB shell | . ",
     "url": "/simple-notes/linux-configs/grub.html#table-of-contents",
     
     "relUrl": "/linux-configs/grub.html#table-of-contents"
-  },"24": {
+  },"32": {
     "doc": "Grub Bootloader",
     "title": "Word of advise",
     "content": ". | Always, always create backup of config file. | Make sure you have bootable usb drive to fix if anything goes wrong. | . To create backup of original setting file, run: . cp /etc/default/grub /etc/default/grub.orig . ",
     "url": "/simple-notes/linux-configs/grub.html#word-of-advise",
     
     "relUrl": "/linux-configs/grub.html#word-of-advise"
-  },"25": {
+  },"33": {
     "doc": "Grub Bootloader",
     "title": "Hide or edit timer on GRUB bootloader",
     "content": ". | Edit /etc/default/grub to these setting GRUB_TIMEOUT=0 # Change the number (in seconds) to shorten or prolong grub screen. | Then update grub bootloader sudo update-grub . | . ",
     "url": "/simple-notes/linux-configs/grub.html#hide-or-edit-timer-on-grub-bootloader",
     
     "relUrl": "/linux-configs/grub.html#hide-or-edit-timer-on-grub-bootloader"
-  },"26": {
+  },"34": {
     "doc": "Grub Bootloader",
     "title": "Boot to last-used OS",
     "content": ". | Edit /etc/default/grub to these setting GRUB_DEFAULT=saved GRUB_SAVEDEFAULT=true . | Then update grub bootloader sudo update-grub . | . ",
     "url": "/simple-notes/linux-configs/grub.html#boot-to-last-used-os",
     
     "relUrl": "/linux-configs/grub.html#boot-to-last-used-os"
-  },"27": {
+  },"35": {
     "doc": "Grub Bootloader",
     "title": "Rename OS menuentry",
     "content": "Either way is fine, it depends on one’s preference actually. However, do note that changing these setting will prevent grub to update kernel. If you want to update kernel, just give the file its execution right and run sudo update-grub. Easy way . | Edit file /boot/grub/grub.cfg menuentry \"Something\" { set root=(hdX,Y) -- boot parameters -- } . | Change that Something to your desired name. | Do not run sudo update-grub. Otherwise grub.cfg will be regenerated to grub-script setting. | . A bit complicated way . | Open file /boot/grub/grub.cfg and look for these headers. ### BEGIN /etc/grub.d/10_linux ### *** *** ### BEGIN /etc/grub.d/30_os-prober ### *** *** . | Copy your desired menuentry and paste-append it to /etc/grub.d/40_custom. The grub man says to be sure to not leave empty line at the end of file. I haven’t tried it, so I don’t know what happen if we ignore the warning. | Then revoke executable right for these files. /etc/grub.d/10_linux /etc/grub.d/30_os-prober . | And lastly, update grub to make changes. sudo update-grub . | . ",
     "url": "/simple-notes/linux-configs/grub.html#rename-os-menuentry",
     
     "relUrl": "/linux-configs/grub.html#rename-os-menuentry"
-  },"28": {
+  },"36": {
     "doc": "Grub Bootloader",
     "title": "Boot to OS using GRUB shell",
     "content": ". | Identify /boot partition grub&gt; ls # expected output # (hd0) (hd0,1) (hd0,2) ... | Adapt to these commands to boot to OS grub&gt; set root=(hd0,1) grub&gt; linux /boot/vmlinuz root=/dev/sda1 grub&gt; initrd /initrd.img grub&gt; boot . | . ",
     "url": "/simple-notes/linux-configs/grub.html#boot-to-os-using-grub-shell",
     
     "relUrl": "/linux-configs/grub.html#boot-to-os-using-grub-shell"
-  },"29": {
+  },"37": {
     "doc": "Gentoo Linux",
     "title": "Gentoo Linux",
     "content": "Gentoo, a highly flexible, source-based Linux distribution. ",
     "url": "/simple-notes/gentoo-linux/",
     
     "relUrl": "/gentoo-linux/"
-  },"30": {
+  },"38": {
     "doc": "Gentoo Linux",
     "title": "Gentoo AMD64 Handbook",
     "content": "The Gentoo Handbook is an effort to centralize documentation into a coherent handbook. This handbook contains the installation instructions for an Internet-based installation and some additional sections for working with Gentoo’s native software tools such as the OpenRC init system and the Portage package manager. ",
     "url": "/simple-notes/gentoo-linux/#gentoo-amd64-handbook",
     
     "relUrl": "/gentoo-linux/#gentoo-amd64-handbook"
-  },"31": {
-    "doc": "Spreadsheets",
-    "title": "Spreadsheets",
-    "content": "All functions and formulas. ",
-    "url": "/simple-notes/spreadsheets/",
+  },"39": {
+    "doc": "Games",
+    "title": "Games",
+    "content": "Some random game notes . ",
+    "url": "/simple-notes/games/",
     
-    "relUrl": "/spreadsheets/"
-  },"32": {
+    "relUrl": "/games/"
+  },"40": {
     "doc": "Linux Configs",
     "title": "Linux Configs",
     "content": "Useful linux notes are here. ",
     "url": "/simple-notes/linux-configs/",
     
     "relUrl": "/linux-configs/"
-  },"33": {
-    "doc": "Linux Packages",
-    "title": "Linux Packages",
-    "content": "Useful linux packages notes are here. ",
-    "url": "/simple-notes/linux-pkgs/",
-    
-    "relUrl": "/linux-pkgs/"
-  },"34": {
-    "doc": "Coding is Life",
-    "title": "Coding is Life",
-    "content": "I mainly learn how to code from internet as a hobby. So I don’t have any books or whatsoever. I often kept searching the same thing after some time and that is not efficient. So here we are with these notes. ",
-    "url": "/simple-notes/coding/",
-    
-    "relUrl": "/coding/"
-  },"35": {
+  },"41": {
     "doc": "Home",
     "title": "Introduction",
     "content": "Very often I need to search something repeatedly. So i decided to put it all here. ",
     "url": "/simple-notes/#introduction",
     
     "relUrl": "/#introduction"
-  },"36": {
+  },"42": {
     "doc": "Home",
     "title": "And here is all of them",
     "content": "All in one place. ",
     "url": "/simple-notes/#and-here-is-all-of-them",
     
     "relUrl": "/#and-here-is-all-of-them"
-  },"37": {
+  },"43": {
     "doc": "Home",
     "title": "Home",
     "content": " ",
     "url": "/simple-notes/",
     
     "relUrl": "/"
-  },"38": {
+  },"44": {
+    "doc": "Spreadsheets",
+    "title": "Spreadsheets",
+    "content": "All functions and formulas. ",
+    "url": "/simple-notes/spreadsheets/",
+    
+    "relUrl": "/spreadsheets/"
+  },"45": {
+    "doc": "Coding is Life",
+    "title": "Coding is Life",
+    "content": "I mainly learn how to code from internet as a hobby. So I don’t have any books or whatsoever. I often kept searching the same thing after some time and that is not efficient. So here we are with these notes. ",
+    "url": "/simple-notes/coding/",
+    
+    "relUrl": "/coding/"
+  },"46": {
+    "doc": "Linux Packages",
+    "title": "Linux Packages",
+    "content": "Useful linux packages notes are here. ",
+    "url": "/simple-notes/linux-pkgs/",
+    
+    "relUrl": "/linux-pkgs/"
+  },"47": {
     "doc": "Javascript",
     "title": "Javascript",
     "content": " ",
     "url": "/simple-notes/coding/javascript.html",
     
     "relUrl": "/coding/javascript.html"
-  },"39": {
+  },"48": {
     "doc": "Javascript",
     "title": "Table of Contents",
     "content": ". | Looping through object | Filter out empty item in list | . ",
     "url": "/simple-notes/coding/javascript.html#table-of-contents",
     
     "relUrl": "/coding/javascript.html#table-of-contents"
-  },"40": {
+  },"49": {
     "doc": "Javascript",
     "title": "Looping through object",
     "content": "Object.entries(obj).forEach(item =&gt; { let key = item[0]; let value = item[1]; }); . ",
     "url": "/simple-notes/coding/javascript.html#looping-through-object",
     
     "relUrl": "/coding/javascript.html#looping-through-object"
-  },"41": {
+  },"50": {
     "doc": "Javascript",
     "title": "Filter out empty item in list",
     "content": "let someArray = ['', 'a', 'b', '', 'c', '']; let output = someArray.filter(item =&gt; item); console.log(output); // Expected output // ['a', 'b', 'c'] . ",
     "url": "/simple-notes/coding/javascript.html#filter-out-empty-item-in-list",
     
     "relUrl": "/coding/javascript.html#filter-out-empty-item-in-list"
-  },"42": {
+  },"51": {
     "doc": "Markdown",
     "title": "Markdown",
     "content": " ",
     "url": "/simple-notes/coding/markdown.html",
     
     "relUrl": "/coding/markdown.html"
-  },"43": {
+  },"52": {
     "doc": "Markdown",
     "title": "Table of Contents",
     "content": ". | Basic Syntax | Extended Syntax | . This notes is taken from The Markdown Guide! . ",
     "url": "/simple-notes/coding/markdown.html#table-of-contents",
     
     "relUrl": "/coding/markdown.html#table-of-contents"
-  },"44": {
+  },"53": {
     "doc": "Markdown",
     "title": "Basic Syntax",
     "content": "These are the elements outlined in John Gruber’s original design document. All Markdown applications support these elements. | Heading . # H1 ## H2 ### H3 . | Bold . **bold text** . | Italic . *italicized text* . | Blockquote . &gt; blockquote . | Ordered List . 1. First item 2. Second item 3. Third item . | Unordered List . - First item - Second item - Third item . | Code . `code` . | Horizontal Rule . --- . | Link . [Markdown Guide](https://www.markdownguide.org) . | Image . ![alt text](https://www.markdownguide.org/assets/images/tux.png) . | . ",
     "url": "/simple-notes/coding/markdown.html#basic-syntax",
     
     "relUrl": "/coding/markdown.html#basic-syntax"
-  },"45": {
+  },"54": {
     "doc": "Markdown",
     "title": "Extended Syntax",
     "content": "These elements extend the basic syntax by adding additional features. Not all Markdown applications support these elements. | Table . | Syntax | Description | ----------- | ----------- | Header | Title | Paragraph | Text | . | Fenced Code Block . \\``` { \"firstName\": \"John\", \"lastName\": \"Smith\", \"age\": 25 } \\``` . | Footnote . Here's a sentence with a footnote. [^1] [^1]: This is the footnote. | Heading ID . ### My Great Heading {#custom-id} . | Definition List . term : definition . | Strikethrough . ~~The world is flat.~~ . | Task List . - [x] Write the press release - [ ] Update the website - [ ] Contact the media . | Emoji . That is so funny! :joy: . See also Copying and Pasting Emoji . | Highlight . I need to highlight these ==very important words==. | Subscript . H~2~O . | Superscript . X^2^ . | . ",
     "url": "/simple-notes/coding/markdown.html#extended-syntax",
     
     "relUrl": "/coding/markdown.html#extended-syntax"
-  },"46": {
+  },"55": {
     "doc": "openssh",
     "title": "openssh",
     "content": " ",
     "url": "/simple-notes/linux-pkgs/openssh.html",
     
     "relUrl": "/linux-pkgs/openssh.html"
-  },"47": {
+  },"56": {
     "doc": "openssh",
     "title": "Table of Contents",
     "content": ". | Start ssh-agent | Passwordless SSH | SSH activation script | Start ssh-agent automatically | . ",
     "url": "/simple-notes/linux-pkgs/openssh.html#table-of-contents",
     
     "relUrl": "/linux-pkgs/openssh.html#table-of-contents"
-  },"48": {
+  },"57": {
     "doc": "openssh",
     "title": "Start ssh-agent",
     "content": "eval \"$(ssh-agent -s)\" . ",
     "url": "/simple-notes/linux-pkgs/openssh.html#start-ssh-agent",
     
     "relUrl": "/linux-pkgs/openssh.html#start-ssh-agent"
-  },"49": {
+  },"58": {
     "doc": "openssh",
     "title": "Passwordless SSH",
     "content": ". | Generate new SSH key . ssh-keygen -C \"key-name\" . | Add SSH key to the ssh-agent . ssh-add {path/to/SSH_key) . | Copy ssh-key to the remote server . ssh-copy-id remote_username@server_ip_address . SSH key could also be transferred manually. Copy the key into ~/.ssh/ onto the client PC. | Setup completed. Enjoy! Just connect to the remote server . ssh remote_username@server_ip_address . This method also works for setting up SSH on Github. Just copy the key.pub contents into Github settings. Test your SSH connection with Github using ssh -T git@github.com afterwards. | . ",
     "url": "/simple-notes/linux-pkgs/openssh.html#passwordless-ssh",
     
     "relUrl": "/linux-pkgs/openssh.html#passwordless-ssh"
-  },"50": {
+  },"59": {
     "doc": "openssh",
     "title": "SSH activation script",
     "content": "#!/usr/bin/bash # SSH credentials SSH_KEY=$HOME/.ssh/github # Activation script eval \"$(ssh-agent -s)\" ssh-add $SSH_KEY echo \"GitHub credentials activated!\" . ",
     "url": "/simple-notes/linux-pkgs/openssh.html#ssh-activation-script",
     
     "relUrl": "/linux-pkgs/openssh.html#ssh-activation-script"
-  },"51": {
+  },"60": {
     "doc": "openssh",
     "title": "Start ssh-agent automatically",
     "content": ". | Append ~/.bashrc file with the following content. if [ -z \"$SSH_AUTH_SOCK\" ]; then eval \"$(ssh-agent -s)\" fi . | You might also want to add your ssh-key automatically. Just append your key in the ~/.bashrc file. SSH_KEYS_TO_ADD=( \"$HOME/.ssh/id_rsa\" \"$HOME/.ssh/id_ed25519\" # Add more key paths here, one per line # \"$HOME/.ssh/my_other_key\" ) for key_path in \"${SSH_KEYS_TO_ADD[@]}\"; do if [ -f \"$key_path\" ]; then echo \"Adding key: $key_path\" ssh-add \"$key_path\" || echo \"Failed to add key: $key_path (check passphrase or file permissions)\" else echo \"Warning: Private key file not found: $key_path\" fi done . | . ",
     "url": "/simple-notes/linux-pkgs/openssh.html#start-ssh-agent-automatically",
     
     "relUrl": "/linux-pkgs/openssh.html#start-ssh-agent-automatically"
-  },"52": {
+  },"61": {
     "doc": "samba",
     "title": "samba",
     "content": " ",
     "url": "/simple-notes/linux-pkgs/samba.html",
     
     "relUrl": "/linux-pkgs/samba.html"
-  },"53": {
+  },"62": {
     "doc": "samba",
     "title": "Table of Contents",
     "content": ". | Installation | Configuration | Samba users | User file permissions | Advanced configuration | . ",
     "url": "/simple-notes/linux-pkgs/samba.html#table-of-contents",
     
     "relUrl": "/linux-pkgs/samba.html#table-of-contents"
-  },"54": {
+  },"63": {
     "doc": "samba",
     "title": "Installation",
     "content": "Use apt to install samba. apt install samba . Some guide might say to install samba-common-bin too, but for me installing samba is enough. ",
     "url": "/simple-notes/linux-pkgs/samba.html#installation",
     
     "relUrl": "/linux-pkgs/samba.html#installation"
-  },"55": {
+  },"64": {
     "doc": "samba",
     "title": "Configuration",
     "content": "Samba provides default config at /etc/samba/smb.conf. I usually backup that default config to /etc/samba/smb.conf.orig and replace it with mine below. #======================= Global Settings ======================= [global] server role = standalone server #======================= Share Definitions ======================= [abah] comment = File abah path = /home/pi/samba/abah/ valid users = abah writeable = yes create mask = 774 create directory mask = 774 [ibu] comment = File ibu path = /home/pi/samba/ibu/ valid users = ibu writeable = yes create mask = 774 create directory mask = 774 [media-server] comment = Movies, music, etc path = /home/pi/samba/media-server/ valid users = @pi writeable = yes create mask = 774 create directory mask = 774 . ",
     "url": "/simple-notes/linux-pkgs/samba.html#configuration",
     
     "relUrl": "/linux-pkgs/samba.html#configuration"
-  },"56": {
+  },"65": {
     "doc": "samba",
     "title": "Samba users",
     "content": "Samba uses the server’s user. So to implement unique user in samba, follow these steps. | Add new user to the server by using: sudo useradd {new_username} . | After creating new user, give it a new samba password as below: sudo smbpasswd -a {new_username} . To modify an existing Samba user’s Samba password use: smbpasswd {username} . | . ",
     "url": "/simple-notes/linux-pkgs/samba.html#samba-users",
     
     "relUrl": "/linux-pkgs/samba.html#samba-users"
-  },"57": {
+  },"66": {
     "doc": "samba",
     "title": "User file permissions",
     "content": "Summary of permission using octal numbers. | Symbolic | Octal | English | . | - - - | 0 | No Permission | . | - - x | 1 | Execute | . | - - w | 2 | Write | . | - w x | 3 | Write &amp; Execute | . | r - - | 4 | Read | . | r - x | 5 | Read &amp; Execute | . | - r w | 6 | Read &amp; Write | . | r w x | 7 | Read, Write, Execute | . In samba config, this can be defined as: . create mask = 0744 create directory mask = 0755 . ",
     "url": "/simple-notes/linux-pkgs/samba.html#user-file-permissions",
     
     "relUrl": "/linux-pkgs/samba.html#user-file-permissions"
-  },"58": {
+  },"67": {
     "doc": "samba",
     "title": "Advanced configuration",
     "content": "There are just too many config to be mentioned here. Go to the official documentation for those config together with their default values. Use the one that suits your need. ",
     "url": "/simple-notes/linux-pkgs/samba.html#advanced-configuration",
     
     "relUrl": "/linux-pkgs/samba.html#advanced-configuration"
-  },"59": {
+  },"68": {
     "doc": "steam",
     "title": "steam",
     "content": " ",
-    "url": "/simple-notes/linux-pkgs/steam.html",
+    "url": "/simple-notes/games/steam.html",
     
-    "relUrl": "/linux-pkgs/steam.html"
-  },"60": {
+    "relUrl": "/games/steam.html"
+  },"69": {
     "doc": "steam",
     "title": "Table of Contents",
     "content": ". | Installation | Shared Multi-Desktop-User Steam Library . | A. Configuration Steps | B. Set Steam Client to use the library | . | . ",
-    "url": "/simple-notes/linux-pkgs/steam.html#table-of-contents",
+    "url": "/simple-notes/games/steam.html#table-of-contents",
     
-    "relUrl": "/linux-pkgs/steam.html#table-of-contents"
-  },"61": {
+    "relUrl": "/games/steam.html#table-of-contents"
+  },"70": {
     "doc": "steam",
     "title": "Installation",
     "content": "Steam is a video game digital distribution service by Valve. The easiest installation is via flatpak. | Install Steam via flatpak. flatpak install flathub com.valvesoftware.Steam . | Install necessary udev rules for game controllers. emerge --ask games-util/game-device-udev-rules . | . ",
-    "url": "/simple-notes/linux-pkgs/steam.html#installation",
+    "url": "/simple-notes/games/steam.html#installation",
     
-    "relUrl": "/linux-pkgs/steam.html#installation"
-  },"62": {
+    "relUrl": "/games/steam.html#installation"
+  },"71": {
     "doc": "steam",
     "title": "Shared Multi-Desktop-User Steam Library",
     "content": "This guide documents how to configure a shared Steam library directory on a Btrfs subvolume for multiple users on the same Linux system using group ownership, the SGID bit, and POSIX Access Control Lists (ACLs). A. Configuration Steps . | Create a Shared User Group . Create a dedicated system group for all users who will share the Steam library: . sudo groupadd steam-users . | Add Users to the Shared Group . Add existing user accounts to the steam-users group (replace user1, user2, user3 with actual system usernames): . sudo usermod -aG steam-users user1 sudo usermod -aG steam-users user2 sudo usermod -aG steam-users user3 . Note: Added users must log out and back in for new group memberships to take effect. | Set Directory Ownership . Assign user ownership to root and group ownership to steam-users: . sudo chown root:steam-users /mnt/steamlib . | Configure Group Permissions and SGID . Grant full read, write, and execute permissions to group members (2770). The leading 2 sets the SGID bit on the directory, ensuring all newly created files and subdirectories automatically inherit the parent directory’s group ownership (steam-users): . sudo chmod 2770 /mnt/steamlib . | Enforce Permission Inheritance with POSIX ACLs . Set default Access Control Lists (ACLs) so that future files and subdirectories created inside the shared folder automatically receive read, write, and execute permissions for members of steam-users: . sudo setfacl -m g:steam-users:rwX -d -m g:steam-users:rwX /mnt/steamlib . | . B. Set Steam Client to use the library . For each user on the system: . | Open Steam. | Go to Settings &gt; Storage. | Click the storage location dropdown at the top and select Add Drive. | Navigate to /mnt/steamlib and click Add to set it as an active storage location. | . ",
-    "url": "/simple-notes/linux-pkgs/steam.html#shared-multi-desktop-user-steam-library",
+    "url": "/simple-notes/games/steam.html#shared-multi-desktop-user-steam-library",
     
-    "relUrl": "/linux-pkgs/steam.html#shared-multi-desktop-user-steam-library"
-  },"63": {
+    "relUrl": "/games/steam.html#shared-multi-desktop-user-steam-library"
+  },"72": {
     "doc": "Linux Swap",
     "title": "Linux Swap",
     "content": " ",
     "url": "/simple-notes/linux-configs/swap.html",
     
     "relUrl": "/linux-configs/swap.html"
-  },"64": {
+  },"73": {
     "doc": "Linux Swap",
     "title": "Table of Contents",
     "content": ". | General idea | Changing swappiness value temporarily | Set swappiness value permanently | Using swap file (instead of swap partition) | . ",
     "url": "/simple-notes/linux-configs/swap.html#table-of-contents",
     
     "relUrl": "/linux-configs/swap.html#table-of-contents"
-  },"65": {
+  },"74": {
     "doc": "Linux Swap",
     "title": "General idea",
     "content": "Swapping is a technique where data in Random Access Memory (RAM) is written to a special location on your hard disk—either a swap partition or a swap file—to free up RAM. Based on Linux documentation: . \"This control is used to define how aggressive (sic) the kernel will swap memory pages. Higher values will increase aggressiveness, lower values decrease the amount of swap. A value of 0 instructs the kernel not to initiate swap until the amount of free and file-backed pages is less than the high water mark in a zone. The default value is 60.\" . ",
     "url": "/simple-notes/linux-configs/swap.html#general-idea",
     
     "relUrl": "/linux-configs/swap.html#general-idea"
-  },"66": {
+  },"75": {
     "doc": "Linux Swap",
     "title": "Changing swappiness value temporarily",
     "content": "sudo sysctl vm.swappiness={value} . ",
     "url": "/simple-notes/linux-configs/swap.html#changing-swappiness-value-temporarily",
     
     "relUrl": "/linux-configs/swap.html#changing-swappiness-value-temporarily"
-  },"67": {
+  },"76": {
     "doc": "Linux Swap",
     "title": "Set swappiness value permanently",
     "content": "Open /etc/sysctl.conf file and add this line. vm.swappiness={value} . ",
     "url": "/simple-notes/linux-configs/swap.html#set-swappiness-value-permanently",
     
     "relUrl": "/linux-configs/swap.html#set-swappiness-value-permanently"
-  },"68": {
+  },"77": {
     "doc": "Linux Swap",
     "title": "Using swap file (instead of swap partition)",
     "content": ". | Create a swapfile sudo dd if=/dev/zero of=/swapfile bs=1024 count=1048576 . /swapfile is the path and name of the swap file. You can change this to something else. The number for count=1048576 equals 1GB. To increase size, multiply that number by 4 if 4GB swap is desired. | Set the swap file permission to 600 sudo chmod 600 /swapfile . | Format the newly created file as swap sudo mkswap /swapfile . | Enable the newly created swap file sudo swapon /swapfile . To verify if the new swap file is in use, run swapon -s . | Add entry to /etc/fstab /swapfile none swap sw 0 0 . | . ",
     "url": "/simple-notes/linux-configs/swap.html#using-swap-file-instead-of-swap-partition",
     
     "relUrl": "/linux-configs/swap.html#using-swap-file-instead-of-swap-partition"
-  },"69": {
+  },"78": {
     "doc": "vim",
     "title": "vim",
     "content": " ",
     "url": "/simple-notes/linux-pkgs/vim.html",
     
     "relUrl": "/linux-pkgs/vim.html"
-  },"70": {
+  },"79": {
     "doc": "vim",
     "title": "Table of Contents",
     "content": ". | Config files | Vim Add-ons . | Favorite vim Add-ons | . | . ",
     "url": "/simple-notes/linux-pkgs/vim.html#table-of-contents",
     
     "relUrl": "/linux-pkgs/vim.html#table-of-contents"
-  },"71": {
+  },"80": {
     "doc": "vim",
     "title": "Config files",
     "content": ". | .vimrc . \" -- global config -- syntax on filetype plugin indent on set ruler set number set nowrap set noswapfile . | . ",
     "url": "/simple-notes/linux-pkgs/vim.html#config-files",
     
     "relUrl": "/linux-pkgs/vim.html#config-files"
-  },"72": {
+  },"81": {
     "doc": "vim",
     "title": "Vim Add-ons",
     "content": ". | Create folders to put vim add-ons . mkdir -p ~/.vim/pack/git/start . | Clone the add-ons to the folder . git clone --depth=1 https://github.com/username/repository.git ~/.vim/pack/git/start/{repository} . | . Favorite vim Add-ons . | emmet-vim | indentLine | . ",
     "url": "/simple-notes/linux-pkgs/vim.html#vim-add-ons",
     
     "relUrl": "/linux-pkgs/vim.html#vim-add-ons"
-  },"73": {
+  },"82": {
     "doc": "yt-dlp",
     "title": "yt-dlp",
     "content": " ",
     "url": "/simple-notes/linux-pkgs/ytdlp.html",
     
     "relUrl": "/linux-pkgs/ytdlp.html"
-  },"74": {
+  },"83": {
     "doc": "yt-dlp",
     "title": "Table of Contents",
     "content": ". | Installation | Scripts | . ",
     "url": "/simple-notes/linux-pkgs/ytdlp.html#table-of-contents",
     
     "relUrl": "/linux-pkgs/ytdlp.html#table-of-contents"
-  },"75": {
+  },"84": {
     "doc": "yt-dlp",
     "title": "Installation",
     "content": "Commonly used in Android Termux. Termux has prepackaged this software. Just run: . pkg update &amp;&amp; \\ pkg install -y python-yt-dlp . ",
     "url": "/simple-notes/linux-pkgs/ytdlp.html#installation",
     
     "relUrl": "/linux-pkgs/ytdlp.html#installation"
-  },"76": {
+  },"85": {
     "doc": "yt-dlp",
     "title": "Scripts",
     "content": "Easy script for downloading video and audio. Downloaded file will be placed in device downloads folder. Just save this script (with a name of your liking) and put it in $PATH directory. Just remember to make it executable. #!/bin/bash echo \"\" echo \" _ _ _ \" echo \" _ _|_ __| |_ __ \" echo \" | | __|____ / _ | '_ \\ \" echo \" |_| ||_____| (_| |_) |\" echo \" \\__, |\\__| \\__,_|_| .__/ \" echo \" |___/ |_| \" echo \"\" # Set variables FILENAMETEMPLATE=\"%(title)s.%(ext)s\" OUTPUTFOLDER=\"/data/data/com.termux/files/home/storage/downloads\" # Check if the file is writable if ! [ -w \"$OUTPUTFOLDER\" ]; then echo \"The output folder is not writable.\" echo \"Please check your termux-setup-storage permission.\" exit 1 fi # Check if yt-dlp is installed command -v yt-dlp &gt;/dev/null 2&gt;&amp;1 if [ $? -ne 0 ]; then echo \"======== yt-dlp ============\" echo \"-- Installing yt-dlp...\" echo \"-- Please wait...\" pkg update &gt;/dev/null 2&gt;&amp;1 &amp;&amp; pkg install -y python-yt-dlp &gt;/dev/null 2&gt;&amp;1; echo \"-- yt-dlp installed successfully!\" echo \"\" fi # Check if termux-api is installed command -v termux-clipboard-get &gt;/dev/null 2&gt;&amp;1 if [ $? -ne 0 ]; then echo \"======== termux-api ========\" echo \"-- Installing termux-api...\" echo \"-- Please wait...\" pkg update &gt;/dev/null 2&gt;&amp;1 &amp;&amp; pkg install -y termux-api &gt;/dev/null 2&gt;&amp;1; echo \"-- termux-api installed successfully!\" echo \"\" fi # Verify copied clipboard echo \"Copied link:\" echo \"--&gt; $(termux-clipboard-get)\" echo \"\" echo \"Is this correct?\" # Get user input and begin download echo \"\" echo \"If yes, what do you want to do?\" echo \"1) Download video\" echo \"2) Download audio only\" echo \"*) Enter any key to quit\" echo \"\" read -p \"Enter your choice: \" INPUT case $INPUT in 1) yt-dlp --path $OUTPUTFOLDER --output $FILENAMETEMPLATE --format \"mp4\" $(termux-clipboard-get) ;; 2) yt-dlp --path $OUTPUTFOLDER --output $FILENAMETEMPLATE --format \"m4a\" $(termux-clipboard-get) ;; *) echo \"Script aborted.\" ;; esac echo \"\" . ",
