@@ -1,5 +1,5 @@
 ---
-title  : Local Binhost
+title  : Gentoo Binary Packages
 layout : default
 parent : Gentoo Linux
 ---
@@ -13,9 +13,27 @@ parent : Gentoo Linux
 1. TOC
 {:toc}
 
+## Official pre-built Gentoo Binary Packages
+
 Gentoo offers prebuilt binary packages through the Gentoo binary package host. And we could build our own too. Packages can be installed without the need to compile code locally, or to install build-time dependencies!
 
-## General rule
+### Using Gentoo Binary as much as possible
+
+The Alternative: `--usepkg + --binpkg-respect-use=n`
+
+If we want to avoid compilation as much as humanly possible, but still want the system to successfully update even if a single binary happens to be missing upstream, use this in `make.conf`:
+
+```
+EMERGE_DEFAULT_OPTS="${EMERGE_DEFAULT_OPTS} --usepkg --binpkg-respect-use=n"
+```
+
+* --usepkg tells Portage: "Always look for a binary first."
+* --binpkg-respect-use=n tells Portage: "And if you find a binary, use it even if the USE flags don't match."
+* If a binary does not exist at all, it will fall back to compiling as a last resort.
+
+## Create Local Binhost
+
+### General rule
 
 For binary packages made on one system to be usable on other systems they must fulfill some requirements:
 
@@ -23,9 +41,9 @@ For binary packages made on one system to be usable on other systems they must f
 - The CFLAGS and CXXFLAGS variables used to build the binary packages must be compatible with all clients.
 - USE flags for processor specific instruction set features (like MMX, SSE, etc.) must be carefully selected; all clients must support them.
 
-## Host
+### Host
 
-### Prepare `/etc/portage/make.conf`
+#### Prepare `/etc/portage/make.conf`
 
 1. Edit `/etc/portage/make.conf` to satisfy to following
 
@@ -40,7 +58,7 @@ For binary packages made on one system to be usable on other systems they must f
     echo "*/* $(cpuid2cpuflags)" >> /etc/portage/package.use
     ```
 
-### Setup a Local GPG Signing Key
+#### Setup a Local GPG Signing Key
 
 1. **Generate a dedicated GPG key with signing capabilities on your build host:**
 
@@ -120,7 +138,7 @@ For binary packages made on one system to be usable on other systems they must f
     rm /tmp/binpkg-public.key
     ```
 
-### Serving Binary Packages via Caddy (HTTP)
+#### Serving Binary Packages via Caddy (HTTP)
 
 1. **Install Caddy**
 
@@ -147,9 +165,9 @@ For binary packages made on one system to be usable on other systems they must f
 
 
 
-## Client
+### Client
 
-### Setup binary package repository
+#### Setup binary package repository
 
 1. Set up the binary package repository in `/etc/portage/binrepos.conf`.
 
@@ -173,7 +191,7 @@ For binary packages made on one system to be usable on other systems they must f
     FEATURES="${FEATURES} getbinpkg binpkg-request-signature"
     ```
 
-### Import and Trust the Host's Public Signing Key
+#### Import and Trust the Host's Public Signing Key
 
 1. **Transfer the public key from host into the client PC**
 
@@ -217,7 +235,7 @@ For binary packages made on one system to be usable on other systems they must f
     gpg: failed to create temporary file 'etc/portage/gnupg/.#1k0x....' : Permission denied
     ```
 
-### Client PC setup completed. Enjoy!
+#### Client PC setup completed. Enjoy!
 
 1. **Install binary packages using Portage as usual**
 
