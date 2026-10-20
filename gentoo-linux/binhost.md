@@ -19,7 +19,7 @@ Gentoo offers prebuilt binary packages through the Gentoo binary package host. A
 
 ### Using Gentoo Binary as much as possible
 
-The Alternative: `--usepkg + --binpkg-respect-use=n`
+**The Alternative:** `--usepkg` + `--binpkg-respect-use=n`
 
 If we want to avoid compilation as much as humanly possible, but still want the system to successfully update even if a single binary happens to be missing upstream, use this in `make.conf`:
 
@@ -27,8 +27,8 @@ If we want to avoid compilation as much as humanly possible, but still want the 
 EMERGE_DEFAULT_OPTS="${EMERGE_DEFAULT_OPTS} --usepkg --binpkg-respect-use=n"
 ```
 
-* --usepkg tells Portage: "Always look for a binary first."
-* --binpkg-respect-use=n tells Portage: "And if you find a binary, use it even if the USE flags don't match."
+* `--usepkg` tells Portage: "Always look for a binary first."
+* `--binpkg-respect-use=n` tells Portage: "And if you find a binary, use it even if the USE flags don't match."
 * If a binary does not exist at all, it will fall back to compiling as a last resort.
 
 ## Create Local Binhost
@@ -37,9 +37,9 @@ EMERGE_DEFAULT_OPTS="${EMERGE_DEFAULT_OPTS} --usepkg --binpkg-respect-use=n"
 
 For binary packages made on one system to be usable on other systems they must fulfill some requirements:
 
-- The builder and client architecture and CHOST must match.
-- The CFLAGS and CXXFLAGS variables used to build the binary packages must be compatible with all clients.
-- USE flags for processor specific instruction set features (like MMX, SSE, etc.) must be carefully selected; all clients must support them.
+- The builder and client architecture and `CHOST` must match.
+- The `CFLAGS` and `CXXFLAGS` variables used to build the binary packages must be compatible with all clients.
+- USE flags for processor specific instruction set features (like `MMX`, `SSE`, etc.) must be carefully selected; all clients must support them.
 
 ### Host
 
